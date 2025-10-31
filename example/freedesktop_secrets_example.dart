@@ -27,7 +27,7 @@ void main() async {
 
   var (item, prompt2) = await collection!.createItem(
     FreedesktopSecretDecrypted(session: client.session, value: utf8.encode("Some password")),
-    FreedesktopSecretsCreateItemProps("test", {}),
+    FreedesktopSecretsCreateItemProps("test", {"somek": "somev"}),
     true,
   );
 
@@ -37,6 +37,13 @@ void main() async {
       return;
     }
   }
+
+  final items = await collection.search({"somek": "somev"});
+  print("");
+  print("");
+  print("");
+  print(items.length);
+  print(utf8.decode((await items[0].getSecret(client.session)).decrypt().value));
 
   (await collection.delete())?.complete<void>((_, _) {});
 
